@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="PersonManager_DataLayer/PersonManager_DATABASE.sqlproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="PersonManager_WEB-API/PersonManager_WEB-API.csproj" />
+  <Project Path="PersonManager_WPF_CLIENT/PersonManager_WPF_CLIENT.csproj" />
+</Solution>
