@@ -12,12 +12,20 @@ namespace PersonManager_WEB_API
         }
 
         public DbSet<Person> Persons { get; set; }
-
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<PhoneConnection> PhoneConnections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Person>()
-                .ToTable("Person");
+                .ToTable("Person").Property(d => d.DateOfBirth)
+                .HasColumnType("timestamp without time zone");
+
+            modelBuilder.Entity<Address>()
+                .ToTable("Address");
+
+            modelBuilder.Entity<PhoneConnection>()
+                .ToTable("PhoneConnection");
         }
 
     }

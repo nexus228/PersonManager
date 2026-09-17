@@ -11,4 +11,5 @@ DBCC CHECKIDENT ('[dbo].[PhoneConnection]', RESEED, 0);
 DBCC CHECKIDENT ('[dbo].[Person]', RESEED, 0);
 */
 
-SELECT * FROM [dbo].[Person];
+
+SELECT * FROM Person

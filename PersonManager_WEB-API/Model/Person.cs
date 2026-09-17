@@ -8,7 +8,11 @@
 
         public string? FirstName { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
+
+        public List<Address>? Addresses { get; set; }
+
+        public List<PhoneConnection>? PhoneConnections { get; set; }
 
     }
 }
