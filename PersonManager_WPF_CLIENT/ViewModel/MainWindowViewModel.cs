@@ -3,6 +3,7 @@ using PersonManager_WPF_CLIENT.Model;
 using PersonManager_WPF_CLIENT.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -83,6 +84,18 @@ namespace PersonManager_WPF_CLIENT.ViewModel
 
         public ICommand LoadPersonsCommand { get; private set; }
 
+        public ICommand ShowPersonDetailsCommand { get; private set; }
+
+        public ICommand EditPersonDataCommand { get; private set; }
+
+        #endregion
+
+        #region public eventHandler
+
+        public event EventHandler<Person>? ShowDetailsViewRequested;
+
+        public event EventHandler<Person>? ShowEditViewRequested;
+
         #endregion
         public MainWindowViewModel(IPersonService personService)
         {
@@ -92,6 +105,15 @@ namespace PersonManager_WPF_CLIENT.ViewModel
             PersonCollectionView.Filter = SearchFilter;
 
             LoadPersonsCommand = new BaseCommand(async () => await LoadPersonsAsync());
+            ShowPersonDetailsCommand = new RelayCommand<Person>(async (person) => ShowDetailsViewRequested?.Invoke(this, person));
+            EditPersonDataCommand = new RelayCommand<Person>(async (person) => ShowEditViewRequested?.Invoke(this, person));
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            ShowDetailsViewRequested = null;
+            ShowEditViewRequested = null;
         }
 
         private async Task LoadPersonsAsync()
@@ -111,6 +133,11 @@ namespace PersonManager_WPF_CLIENT.ViewModel
             PersonCollectionView = CollectionViewSource.GetDefaultView(Persons);
 
             IsLoading = false;
+        }
+
+        private async Task ShowDetailsView(Person person)
+        {
+            
         }
 
         private bool SearchFilter(object obj)

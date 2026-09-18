@@ -1,4 +1,5 @@
-﻿using PersonManager_WPF_CLIENT.Services;
+﻿using PersonManager_WPF_CLIENT.Model;
+using PersonManager_WPF_CLIENT.Services;
 using PersonManager_WPF_CLIENT.Services.ApiClient;
 using PersonManager_WPF_CLIENT.View;
 using PersonManager_WPF_CLIENT.ViewModel;
@@ -14,6 +15,8 @@ namespace PersonManager_WPF_CLIENT
     public partial class App : Application
     {
         private IPersonService _personService;
+
+        private MainWindowViewModel _mainWindowViewModel;
 
         public App()
         {
@@ -35,21 +38,37 @@ namespace PersonManager_WPF_CLIENT
         {
             base.OnStartup(e);
 
-            MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(_personService);
+            _mainWindowViewModel = new MainWindowViewModel(_personService);
+            _mainWindowViewModel.ShowDetailsViewRequested += MainWindowViewModel_ShowDetailsViewRequested;
+            _mainWindowViewModel.ShowEditViewRequested += MainWindowViewModel_ShowEditViewRequested;
+
 
             MainWindow mainWindow = new MainWindow()
             {
                 Height = SystemParameters.PrimaryScreenHeight * 0.5,
                 Width = SystemParameters.PrimaryScreenWidth * 0.5,
-                DataContext = mainWindowViewModel
+                DataContext = _mainWindowViewModel
             };
             mainWindow.Show();
+        }
+
+        private void MainWindowViewModel_ShowDetailsViewRequested(object? sender, Person e)
+        {
+            MessageBox.Show($"Details requested for: {e.Name} {e.FirstName}, Date of Birth: {e.DateOfBirth?.ToString("d")}");   
+        }
+
+        private void MainWindowViewModel_ShowEditViewRequested(object? sender, Person e)
+        {
+            MessageBox.Show($"Edit requested for: {e.Name} {e.FirstName}, Date of Birth: {e.DateOfBirth?.ToString("d")}");   
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
             // Dispose of any resources if necessary
+            _mainWindowViewModel.ShowDetailsViewRequested -= MainWindowViewModel_ShowDetailsViewRequested;
+            _mainWindowViewModel.ShowEditViewRequested -= MainWindowViewModel_ShowEditViewRequested;
+            _mainWindowViewModel.Dispose();
         }
 
     }

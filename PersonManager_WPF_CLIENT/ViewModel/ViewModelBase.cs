@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PersonManager_WPF_CLIENT.ViewModel
 {
-    internal class ViewModelBase : INotifyPropertyChanged
+    internal class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -15,5 +15,7 @@ namespace PersonManager_WPF_CLIENT.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public virtual void Dispose() { }
     }
 }
