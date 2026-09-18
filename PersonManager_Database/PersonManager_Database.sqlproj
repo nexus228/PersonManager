@@ -11,8 +11,8 @@
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>PersonManager_DataLayer</RootNamespace>
-    <AssemblyName>PersonManager_DataLayer</AssemblyName>
+    <RootNamespace>PersonManager_Database</RootNamespace>
+    <AssemblyName>PersonManager_Database</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
