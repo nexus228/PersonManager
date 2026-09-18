@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="PersonManager_DataLayer/PersonManager_DATABASE.sqlproj" Id="4c4f2971-85f5-4f0e-82e0-6fd1d66a5926">
+  <Project Path="PersonManager_Database/PersonManager_Database.sqlproj" Id="4c4f2971-85f5-4f0e-82e0-6fd1d66a5926">
     <Build />
     <Deploy />
   </Project>
