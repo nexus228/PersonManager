@@ -52,9 +52,18 @@ namespace PersonManager_WPF_CLIENT
             mainWindow.Show();
         }
 
-        private void MainWindowViewModel_ShowDetailsViewRequested(object? sender, Person e)
+        private void MainWindowViewModel_ShowDetailsViewRequested(object? sender, Person personToShow)
         {
-            MessageBox.Show($"Details requested for: {e.Name} {e.FirstName}, Date of Birth: {e.DateOfBirth?.ToString("d")}");   
+            DetailsWindow detailsWindow = new DetailsWindow()
+            {
+                Height = SystemParameters.PrimaryScreenHeight * 0.2,
+                Width = SystemParameters.PrimaryScreenWidth * 0.2,
+                DataContext = new DetailsWindowViewModel(personToShow)
+            };
+
+            detailsWindow.ShowDialog();
+
+
         }
 
         private void MainWindowViewModel_ShowEditViewRequested(object? sender, Person e)

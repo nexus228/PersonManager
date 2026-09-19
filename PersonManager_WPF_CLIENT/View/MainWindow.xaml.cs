@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using PersonManager_WPF_CLIENT.Model;
+using PersonManager_WPF_CLIENT.ViewModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PersonManager_WPF_CLIENT.View
 {
@@ -10,6 +14,18 @@ namespace PersonManager_WPF_CLIENT.View
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is MainWindowViewModel viewModel && ((DataGrid)sender).SelectedItem is Person person)
+            {
+                if (viewModel.ShowPersonDetailsCommand.CanExecute(person))
+                {
+                    viewModel.ShowPersonDetailsCommand.Execute(person);
+                }
+            }
         }
     }
 }

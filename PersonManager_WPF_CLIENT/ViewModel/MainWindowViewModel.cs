@@ -2,8 +2,8 @@
 using PersonManager_WPF_CLIENT.Model;
 using PersonManager_WPF_CLIENT.Services;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -84,6 +84,8 @@ namespace PersonManager_WPF_CLIENT.ViewModel
 
         public ICommand LoadPersonsCommand { get; private set; }
 
+        public ICommand ClearListCommand { get; private set; }
+
         public ICommand ShowPersonDetailsCommand { get; private set; }
 
         public ICommand EditPersonDataCommand { get; private set; }
@@ -100,20 +102,40 @@ namespace PersonManager_WPF_CLIENT.ViewModel
         public MainWindowViewModel(IPersonService personService)
         {
             _personService = personService;
+
+            Persons.CollectionChanged += Persons_CollectionChanged;
+
             PersonCollectionView = CollectionViewSource.GetDefaultView(Persons);
 
             PersonCollectionView.Filter = SearchFilter;
 
             LoadPersonsCommand = new BaseCommand(async () => await LoadPersonsAsync());
+            ClearListCommand = new BaseCommand(() => Persons.Clear(), CanClearList);
+
             ShowPersonDetailsCommand = new RelayCommand<Person>(async (person) => ShowDetailsViewRequested?.Invoke(this, person));
-            EditPersonDataCommand = new RelayCommand<Person>(async (person) => ShowEditViewRequested?.Invoke(this, person));
+            EditPersonDataCommand = new RelayCommand<Person>(async (person) => ShowEditViewRequested?.Invoke(this, person));  
         }
+
 
         public override void Dispose()
         {
             base.Dispose();
+            Persons.CollectionChanged -= Persons_CollectionChanged;
             ShowDetailsViewRequested = null;
             ShowEditViewRequested = null;
+        }
+
+        private void Persons_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if(ClearListCommand is BaseCommand clearListCommand)
+            {
+                clearListCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private bool CanClearList()
+        {
+            return Persons.Count > 0;
         }
 
         private async Task LoadPersonsAsync()
