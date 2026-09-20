@@ -1,4 +1,5 @@
-﻿using PersonManager_WPF_CLIENT.Model;
+﻿using PersonManager_WPF_CLIENT.CustomEventArgs;
+using PersonManager_WPF_CLIENT.Model;
 using PersonManager_WPF_CLIENT.Services;
 using PersonManager_WPF_CLIENT.Services.ApiClient;
 using PersonManager_WPF_CLIENT.View;
@@ -17,11 +18,52 @@ namespace PersonManager_WPF_CLIENT
         private IPersonService _personService;
 
         private MainWindowViewModel _mainWindowViewModel;
+        private EditWindow _editWindow;
 
         public App()
         {
             IPersonApiClient apiClient = _initPersonApiClient();
             _personService = new PersonService(apiClient);
+            _personService.PersonChanged += PersonService_PersonChanged;
+
+            _mainWindowViewModel = new MainWindowViewModel(_personService);
+        }
+
+        protected override async void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            _mainWindowViewModel.ShowDetailsViewRequested += MainWindowViewModel_ShowDetailsViewRequested;
+            _mainWindowViewModel.ShowEditViewRequested += MainWindowViewModel_ShowEditViewRequested;
+
+            MainWindow mainWindow = new MainWindow()
+            {
+                Height = SystemParameters.PrimaryScreenHeight * 0.5,
+                Width = SystemParameters.PrimaryScreenWidth * 0.5,
+                DataContext = _mainWindowViewModel
+            };
+            mainWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            _personService.PersonChanged -= PersonService_PersonChanged;
+
+            // Dispose of any resources if necessary
+            _mainWindowViewModel.ShowDetailsViewRequested -= MainWindowViewModel_ShowDetailsViewRequested;
+            _mainWindowViewModel.ShowEditViewRequested -= MainWindowViewModel_ShowEditViewRequested;
+            _mainWindowViewModel.Dispose();
+        }
+
+
+        private void PersonService_PersonChanged(object? sender, PersonChangedEventArgs e)
+        {
+            if (_editWindow != null && _editWindow.IsActive)
+            {
+                _editWindow.Close();
+            }
         }
 
         private IPersonApiClient _initPersonApiClient()
@@ -33,24 +75,6 @@ namespace PersonManager_WPF_CLIENT
             return new PersonApiClient(httpClient);
         }
 
-
-        protected override async void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
-
-            _mainWindowViewModel = new MainWindowViewModel(_personService);
-            _mainWindowViewModel.ShowDetailsViewRequested += MainWindowViewModel_ShowDetailsViewRequested;
-            _mainWindowViewModel.ShowEditViewRequested += MainWindowViewModel_ShowEditViewRequested;
-
-
-            MainWindow mainWindow = new MainWindow()
-            {
-                Height = SystemParameters.PrimaryScreenHeight * 0.5,
-                Width = SystemParameters.PrimaryScreenWidth * 0.5,
-                DataContext = _mainWindowViewModel
-            };
-            mainWindow.Show();
-        }
 
         private void MainWindowViewModel_ShowDetailsViewRequested(object? sender, Person personToShow)
         {
@@ -68,17 +92,21 @@ namespace PersonManager_WPF_CLIENT
 
         private void MainWindowViewModel_ShowEditViewRequested(object? sender, Person e)
         {
-            MessageBox.Show($"Edit requested for: {e.Name} {e.FirstName}, Date of Birth: {e.DateOfBirth?.ToString("d")}");   
+
+            if(_editWindow != null)
+            {
+                _editWindow.Close();
+            }
+
+            _editWindow = new EditWindow()
+            {
+                Height = SystemParameters.PrimaryScreenHeight * 0.2,
+                Width = SystemParameters.PrimaryScreenWidth * 0.2,
+                DataContext = new EditWindowViewModel(e, _personService)
+            };
+            _editWindow.ShowDialog();
         }
 
-        protected override void OnExit(ExitEventArgs e)
-        {
-            base.OnExit(e);
-            // Dispose of any resources if necessary
-            _mainWindowViewModel.ShowDetailsViewRequested -= MainWindowViewModel_ShowDetailsViewRequested;
-            _mainWindowViewModel.ShowEditViewRequested -= MainWindowViewModel_ShowEditViewRequested;
-            _mainWindowViewModel.Dispose();
-        }
 
     }
 }

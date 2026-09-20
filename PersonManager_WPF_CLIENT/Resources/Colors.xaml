@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="PrimaryColor" Color="#FF00386e" />
+    <SolidColorBrush x:Key="SecondaryColor" Color="#FF00d3ff" />
+
+    <!-- Buttons -->
+    <SolidColorBrush x:Key="BtnBackgroundColor" Color="#FF00386e" />
+    <SolidColorBrush x:Key="BtnForegroundColor" Color="#FFF2EFEB" />
+
+    <SolidColorBrush x:Key="BtnBackgroundIsMouseOverColor" Color="#FF24608D" />
+    <SolidColorBrush x:Key="BtnBackgroundIsPressedColor" Color="#FF001936" />
+    <SolidColorBrush x:Key="BtnBackgroundInActiveColor" Color="#FFDEDEDE" />
+
+
+</ResourceDictionary>

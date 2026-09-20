@@ -7,10 +7,61 @@
 
        
             <ResourceDictionary>
+                
                 <ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="Resources/Images.xaml"/>
+                    <ResourceDictionary Source="Resources/Colors.xaml"/>
+                    <ResourceDictionary Source="Resources/Strings.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
+
+
+            <Style TargetType="Button" x:Key="SE_ButtonStyle">
+                <!-- Set default background and other properties -->
+                <Setter Property="Background" Value="{StaticResource BtnBackgroundColor}"/>
+                <Setter Property="Foreground" Value="{StaticResource BtnForegroundColor}"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+                <!-- Redefine the ControlTemplate to include mouse-over behavior -->
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border"
+                   Background="{TemplateBinding Background}"
+                   BorderThickness="{TemplateBinding BorderThickness}"
+                   CornerRadius="4"
+                   SnapsToDevicePixels="True">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  Margin="{TemplateBinding Padding}"
+                                  RecognizesAccessKey="True"/>
+                            </Border>
+
+                            <!-- Triggers for visual states -->
+                            <ControlTemplate.Triggers>
+                                <!-- Mouse Over -->
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="{StaticResource BtnBackgroundIsMouseOverColor}"/>
+                                </Trigger>
+
+                                <!-- Pressed -->
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="{StaticResource BtnBackgroundIsPressedColor}"/>
+                                </Trigger>
+
+                                <!-- Disabled -->
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="border" Property="Background" Value="{StaticResource BtnBackgroundInActiveColor}"/>
+                                    <Setter Property="Foreground" Value="#FF838383"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
        
 
 

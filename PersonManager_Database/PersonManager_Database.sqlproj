@@ -57,14 +57,17 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Scipts" />
+    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Person.sql" />
     <Build Include="Address.sql" />
     <Build Include="PhoneConnection.sql" />
     <None Include="Scipts\InsertTestData.sql" />
+    <Build Include="Views\PersonDataView.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scipts\Testscript.sql" />
+    <None Include="Scipts\ScriptForTasks.sql" />
   </ItemGroup>
 </Project>

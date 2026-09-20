@@ -287,7 +287,8 @@ VALUES
     (9, '0151 90123456'),
 
     -- Kowalski, Mateusz
-    (10, '0351 1122334'),
+    (10, '0351 1122334'), 
+    (10, 'asda 1122334'), /* wrong number for delete test*/
 
     -- Martin, Sophie
     (11, '+49 711 2233445'),
@@ -333,6 +334,7 @@ VALUES
 
     -- Tanaka, Haruto
     (23, '089 1213141'),
+    (23, '-47 1122334'), /* wrong number for delete test*/
 
     -- Chen, Mei
     (24, '+49 351 1314151'),

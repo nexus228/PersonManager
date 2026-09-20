@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PersonManager_WEB_API.Model;
 
 namespace PersonManager_WEB_API.Controllers
 {
@@ -41,6 +42,42 @@ namespace PersonManager_WEB_API.Controllers
             }
 
             return Ok(persons);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePerson(int id, Person personToUpdate)
+        {
+            if (personToUpdate != null)
+            {
+                if (id != personToUpdate.Id)
+                {
+                    return BadRequest();
+                }
+
+                var person = await _context.Persons.FindAsync(id);
+
+                if (person == null)
+                {
+                    return NotFound();
+                }
+
+                person.FirstName = personToUpdate.FirstName;
+                person.Name = personToUpdate.Name;
+                person.DateOfBirth = personToUpdate.DateOfBirth;
+                
+
+                try 
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok(person);
+                }
+                catch(Exception)
+                {
+                    return StatusCode(500, "An error occurred while updating the person.");
+                }
+            }
+            return BadRequest();
+
         }
     }
 }

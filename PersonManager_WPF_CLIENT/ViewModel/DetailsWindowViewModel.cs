@@ -14,15 +14,13 @@ namespace PersonManager_WPF_CLIENT.ViewModel
         {
             get;
             private set;
-        }
+        } = new ObservableCollection<Address>();
 
         public ObservableCollection<PhoneConnection> PhoneNumbers
         {
             get;
             private set;
-        }
-
-       
+        } = new ObservableCollection<PhoneConnection>();
 
         public DetailsWindowViewModel(Person personToShow)
         {

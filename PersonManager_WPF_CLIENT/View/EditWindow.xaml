@@ -1,0 +1,142 @@
+﻿<Window x:Class="PersonManager_WPF_CLIENT.View.EditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PersonManager_WPF_CLIENT.View"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="EditWindow" Height="450" Width="800">
+
+
+    <ScrollViewer >
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Row="0">
+
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label 
+                        Grid.Column="0"
+                        Content="{StaticResource String_FirstName_WithColon}"  
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Center" 
+                        Margin="5"/>
+                    
+                    <TextBox 
+                        Grid.Column="1" 
+                        Margin="5" 
+                        Text="{Binding FirstNameToEdit, UpdateSourceTrigger=PropertyChanged}" 
+                        VerticalContentAlignment="Center"/>
+                </Grid>
+
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        Content="{StaticResource String_Name_WithColon}"
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Center" 
+                        Margin="5"/>
+                    
+                    <TextBox 
+                        Grid.Column="1"
+                        Margin="5" 
+                        Text="{Binding NameToEdit, UpdateSourceTrigger=PropertyChanged}" 
+                        VerticalContentAlignment="Center"/>
+                </Grid>
+
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        Content="{StaticResource String_DateOfBirth_WithColon}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Margin="5"/>
+
+                    <DatePicker 
+                        Grid.Column="1"
+                        Margin="5"
+                        SelectedDate="{Binding DateOfBirthToEdit, UpdateSourceTrigger=PropertyChanged}"
+                        VerticalContentAlignment="Center"/>
+                </Grid>
+
+            </StackPanel>
+            
+        
+
+        <Button 
+            Margin="50" 
+            MinHeight="30" 
+            Width="200"
+            Grid.Row="1" 
+            Style="{StaticResource SE_ButtonStyle}"
+            Content="{StaticResource String_SaveChanges}" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Bottom" 
+            Command="{Binding SaveChangesCommand}"/>
+
+            <!-- loading indicator -->
+            <Border 
+                Background="#55FFFFFF" 
+                Grid.Row="0" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center">
+
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility"
+                                Value="Collapsed"/>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoading}"
+                             Value="True">
+                                <Setter Property="Visibility"
+                            Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+                    <ProgressBar
+                        Width="200"
+                        Height="15"
+                        IsIndeterminate="True"/>
+
+                    <TextBlock
+                        Text="{StaticResource String_SaveProgress}"
+                        FontSize="18"
+                        HorizontalAlignment="Center"
+                        Margin="0,10,0,0"/>
+
+                </StackPanel>
+
+            </Border>
+
+        </Grid>
+
+    </ScrollViewer>
+</Window>

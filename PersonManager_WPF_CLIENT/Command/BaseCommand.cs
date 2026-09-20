@@ -1,9 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace PersonManager_WPF_CLIENT.Command
 {

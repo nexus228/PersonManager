@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PersonManager_WPF_CLIENT.View"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Person Manager" Height="450" Width="800">
 
 
     <Grid Margin="10">
@@ -20,19 +20,23 @@
         <!-- Button -->
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
-            <Button Margin="0,0,10,0"
-        Content="Personen laden"
-        Width="120"
-        Height="30"
-        HorizontalAlignment="Left"
-        Command="{Binding LoadPersonsCommand}"/>
+            <Button 
+                Style="{StaticResource SE_ButtonStyle}"    
+                Margin="0,0,10,0"
+                Content="{StaticResource String_LoadPerson}"
+                Width="120"
+                Height="30"
+                HorizontalAlignment="Left"
+                Command="{Binding LoadPersonsCommand}"/>
 
-            <Button Margin="0,0,10,0"
-Content="Liste leeren"
-Width="120"
-Height="30"
-HorizontalAlignment="Left"
-Command="{Binding ClearListCommand}"/>
+            <Button 
+                Style="{StaticResource SE_ButtonStyle}"    
+                Margin="0,0,10,0"
+                Content="{StaticResource String_ClearList}"
+                Width="120"
+                Height="30"
+                HorizontalAlignment="Left"
+                Command="{Binding ClearListCommand}"/>
         </StackPanel>
         
 
@@ -40,13 +44,14 @@ Command="{Binding ClearListCommand}"/>
         <!-- Searchfield with label -->
         <StackPanel Margin="0,10,0,10" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
 
-            <Label HorizontalContentAlignment="Center">Suche eine Person anhand des Vornamens oder Nachnamens: </Label>
+            <Label 
+                HorizontalContentAlignment="Center" 
+                Content="{StaticResource String_SearchPersonForName}"/>
             <TextBox 
-      Width="250"
-      HorizontalAlignment="Left" VerticalContentAlignment="Center"
-      Margin="0,0,0,0"
-      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-      ToolTip="Name suchen"/>
+                Width="250"
+                HorizontalAlignment="Left" VerticalContentAlignment="Center"
+                Margin="0,0,0,0"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
         </StackPanel>
         
@@ -64,7 +69,7 @@ Command="{Binding ClearListCommand}"/>
             <DataGrid.Columns>
 
                 <DataGridTextColumn
-                    Header="Vorname"
+                    Header="{StaticResource String_FirstName}"
                     Binding="{Binding FirstName}"
                     Width="*">
                     <DataGridTextColumn.ElementStyle>
@@ -79,7 +84,11 @@ Command="{Binding ClearListCommand}"/>
                 </DataGridTextColumn>
 
 
-                <DataGridTextColumn Header="Nachname" Binding="{Binding Name}" Width="*">
+                <DataGridTextColumn 
+                    Header="{StaticResource String_Name}" 
+                    Binding="{Binding Name}" 
+                    Width="*">
+                    
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -91,7 +100,7 @@ Command="{Binding ClearListCommand}"/>
                 </DataGridTextColumn>
 
                 <DataGridTextColumn
-                    Header="Geburtsdatum"
+                    Header="{StaticResource String_DateOfBirth}"
                     Binding="{Binding DateOfBirth, StringFormat={}{0:dd.MM.yyyy}}"
                     Width="*">
                     <DataGridTextColumn.ElementStyle>
@@ -105,7 +114,7 @@ Command="{Binding ClearListCommand}"/>
                 </DataGridTextColumn>
 
                 <DataGridTemplateColumn 
-                    Header="Aktionen"
+                    Header="{StaticResource String_Actions}"
                     Width="SizeToCells"
                     MinWidth="125">
                     <DataGridTemplateColumn.CellTemplate>
@@ -116,25 +125,27 @@ Command="{Binding ClearListCommand}"/>
 
 
                                 <Button
-            Command="{Binding DataContext.ShowPersonDetailsCommand,RelativeSource={RelativeSource AncestorType=DataGrid}}"
-            CommandParameter="{Binding}">
+                                    Style="{StaticResource SE_ButtonStyle}"
+                                    Command="{Binding DataContext.ShowPersonDetailsCommand,RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
 
                                     <StackPanel>
                                         <Image Source="{StaticResource Image_PersonDetails}" Margin="0,5,0,0"/>
-                                        <Label>Details</Label>
+                                        <Label Content="{StaticResource String_Details}" Foreground="White"/>
                                     </StackPanel>
 
                                 </Button>
 
 
 
-                                <Button 
-        Command="{Binding DataContext.EditPersonDataCommand,RelativeSource={RelativeSource AncestorType=DataGrid}}"
-        CommandParameter="{Binding}">
+                                <Button
+                                    Style="{StaticResource SE_ButtonStyle}"
+                                    Command="{Binding DataContext.EditPersonDataCommand,RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
 
                                     <StackPanel>
                                         <Image Source="{StaticResource Image_EditPerson}" Margin="0,5,0,0"/>
-                                        <Label>Bearbeiten</Label>
+                                        <Label Content="{StaticResource String_Edit}" Foreground="White"/> 
                                     </StackPanel>
 
                                 </Button>
@@ -153,7 +164,7 @@ Command="{Binding ClearListCommand}"/>
 
         <!-- loading indicator -->
         <Border 
-            Background="#55FFFFFF" 
+            Background="#00FFFFFF" 
             Grid.Row="2" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Center">
@@ -183,7 +194,7 @@ Command="{Binding ClearListCommand}"/>
                     IsIndeterminate="True"/>
 
                 <TextBlock
-                    Text="Lade Daten ..."
+                    Text="{StaticResource String_LoadData}"
                     FontSize="18"
                     HorizontalAlignment="Center"
                     Margin="0,10,0,0"/>

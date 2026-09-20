@@ -1,4 +1,5 @@
 ﻿using PersonManager_WPF_CLIENT.Command;
+using PersonManager_WPF_CLIENT.CustomEventArgs;
 using PersonManager_WPF_CLIENT.Model;
 using PersonManager_WPF_CLIENT.Services;
 using System.Collections.ObjectModel;
@@ -102,11 +103,12 @@ namespace PersonManager_WPF_CLIENT.ViewModel
         public MainWindowViewModel(IPersonService personService)
         {
             _personService = personService;
+            _personService.PersonChanged += PersonService_PersonChanged;
 
             Persons.CollectionChanged += Persons_CollectionChanged;
 
+            // use ICollectionView to display filtered data 
             PersonCollectionView = CollectionViewSource.GetDefaultView(Persons);
-
             PersonCollectionView.Filter = SearchFilter;
 
             LoadPersonsCommand = new BaseCommand(async () => await LoadPersonsAsync());
@@ -116,10 +118,10 @@ namespace PersonManager_WPF_CLIENT.ViewModel
             EditPersonDataCommand = new RelayCommand<Person>(async (person) => ShowEditViewRequested?.Invoke(this, person));  
         }
 
-
         public override void Dispose()
         {
             base.Dispose();
+            _personService.PersonChanged -= PersonService_PersonChanged;
             Persons.CollectionChanged -= Persons_CollectionChanged;
             ShowDetailsViewRequested = null;
             ShowEditViewRequested = null;
@@ -157,11 +159,6 @@ namespace PersonManager_WPF_CLIENT.ViewModel
             IsLoading = false;
         }
 
-        private async Task ShowDetailsView(Person person)
-        {
-            
-        }
-
         private bool SearchFilter(object obj)
         {
             bool returnValue = false;
@@ -171,6 +168,7 @@ namespace PersonManager_WPF_CLIENT.ViewModel
             {
                 if (!string.IsNullOrEmpty(SearchText) && personToFilter.Name != null && personToFilter.FirstName != null)
                 {
+                    // If name or firstname matchs with input string from search field, it returs true
                     returnValue = (personToFilter.Name.Contains(SearchText) || personToFilter.FirstName.Contains(SearchText));
                 }
                 else if(string.IsNullOrWhiteSpace(SearchText))
@@ -183,6 +181,24 @@ namespace PersonManager_WPF_CLIENT.ViewModel
                 }
             }
             return returnValue;
+        }
+
+        private void PersonService_PersonChanged(object? sender, PersonChangedEventArgs e)
+        {
+            // update viewmodel PersonList with updated data 
+
+            if(e.Person == null)
+            {
+                return;
+            }
+
+            Person? existingPerson = Persons.FirstOrDefault(p => p.Id == e.Person.Id);
+            if(existingPerson == null)
+            {
+                return;
+            }
+            int indexOfExistingPerson = Persons.IndexOf(existingPerson);
+            Persons[indexOfExistingPerson] = e.Person;
         }
 
         private async Task _simulateProgessDelay()
