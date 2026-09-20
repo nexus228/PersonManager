@@ -15,3 +15,7 @@ Erstellt mit Visual Studio Community Edition 18.10.1
 4) InsertTestData.sql ausführen damit Testdaten in die Datenbank geschrieben werden
 5) Startprojekte in Visual Studio auf mehrere Projekte stellen (WEB-API und WPF_CLIENT) Aktion auf Starten stellen
 6) Anwendungen starten
+
+
+SQL-Skripte zu den Aufgaben in ScriptForTasks.sql
+
