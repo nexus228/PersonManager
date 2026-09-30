@@ -80,8 +80,8 @@ namespace PersonManager_WPF_CLIENT
         {
             DetailsWindow detailsWindow = new DetailsWindow()
             {
-                Height = SystemParameters.PrimaryScreenHeight * 0.2,
-                Width = SystemParameters.PrimaryScreenWidth * 0.2,
+                Height = 400,
+                Width = 700,
                 DataContext = new DetailsWindowViewModel(personToShow)
             };
 
@@ -100,8 +100,8 @@ namespace PersonManager_WPF_CLIENT
 
             _editWindow = new EditWindow()
             {
-                Height = SystemParameters.PrimaryScreenHeight * 0.2,
-                Width = SystemParameters.PrimaryScreenWidth * 0.2,
+                Height = 400,
+                Width = 650,
                 DataContext = new EditWindowViewModel(e, _personService)
             };
             _editWindow.ShowDialog();

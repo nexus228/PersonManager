@@ -13,3 +13,5 @@ DBCC CHECKIDENT ('[dbo].[Person]', RESEED, 0);
 
 
 SELECT * FROM Person
+SELECT * FROM Address
+SELECT * FROM PhoneConnection
