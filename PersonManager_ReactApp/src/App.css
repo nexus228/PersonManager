@@ -1,0 +1,95 @@
+.styled_btn {
+    background-color: #00386e;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+    .styled_btn:hover {
+        background-color: #24608D
+    }
+
+    .styled_btn:active {
+        background-color: #001936;
+       
+       
+    }
+    .styled_btn:disabled {
+        background-color: #DEDEDE;
+    }
+
+
+.image-btn {
+    background-image: url('button-bg.png');
+    background-size: cover;
+    background-position: center;
+    width: 150px;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+}
+
+
+
+
+.styled_div {
+    align-content: flex-start;
+    display: inline-flex;
+    margin: 15px;
+    padding: 16px;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+th,
+td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 30%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 30%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+        width: 15%;
+    }
+    th:nth-child(3),
+    td:nth-child(3) {
+        width: 15%;
+    }

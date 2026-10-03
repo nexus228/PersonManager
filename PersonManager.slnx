@@ -3,6 +3,10 @@
     <Build />
     <Deploy />
   </Project>
+  <Project Path="PersonManager_ReactApp/personmanager_reactapp.esproj">
+    <Build />
+    <Deploy />
+  </Project>
   <Project Path="PersonManager_WEB-API/PersonManager_WEB-API.csproj" />
   <Project Path="PersonManager_WPF_CLIENT/PersonManager_WPF_CLIENT.csproj" />
 </Solution>
