@@ -2,25 +2,22 @@ import { useState } from 'react'
 
 
 import { Icon } from '@mdi/react';
-import { mdiPencil } from '@mdi/js';
+import { mdiPencil, mdiCardAccountDetails  } from '@mdi/js';
 
 
 import './App.css'
+import type { Person } from './types'
 
-
-
-interface Person { id: number; name: string; firstName: string; dateOfBirth: string; }
 
 function App()
 {
   
     const [persons, setPersons] = useState<Person[] > ([]); 
+    const [selectedPerson, setSelectedPerson] = useState<Person | null>(null)
 
     const [searchText, setSearchText] = useState('');
 
-    const filteredPersons = persons.filter(person =>
-    person.firstName.toLowerCase().includes(searchText.toLowerCase()) ||
-    person.name.toLowerCase().includes(searchText.toLowerCase()));
+    const filteredPersons = persons.filter(person => person.firstName.toLowerCase().includes(searchText.toLowerCase()) || person.name.toLowerCase().includes(searchText.toLowerCase()));
 
     const loadPersons = async () => {  
 
@@ -53,7 +50,7 @@ function App()
 
               <div className="styled_div">
                   <label>Suche eine Person anhand des Vornamens oder Nachnamens:</label>
-                  <input type="text" placeholder="Search.." value={searchText} onChange={e => setSearchText(e.target.value)}/>
+                  <input className="styled_searchfield" type="text" placeholder="Search.." value={searchText} onChange={e => setSearchText(e.target.value)}/>
               </div>
 
            <div className="styled_div">
@@ -77,7 +74,7 @@ function App()
                             
                             <td>
                                 <div>
-                                <button className="styled_btn">Details</button>
+                                <button className="styled_btn" onClick={() => setSelectedPerson(person)}><Icon path={mdiCardAccountDetails} size={0.7} /> Details</button>
                                 <button className="styled_btn"><Icon path={mdiPencil} size={0.7} /> Bearbeiten</button>  
  
                             </div>
@@ -87,10 +84,90 @@ function App()
                     ))}
                 </tbody>
               </table>
+
+
+
+
           </div>
-          
-    </>
-  )
+
+
+           {selectedPerson && (
+
+                <div className="dialog_overlay">
+
+                    <div className="details_dialog">
+
+                        <h2>
+                            {selectedPerson.firstName} {selectedPerson.name}
+                        </h2>
+
+
+                        <h3>Adressen</h3>
+
+                        {selectedPerson.addresses?.length > 0 ? (
+
+                            selectedPerson.addresses.map((address) => (
+
+                                <div key={address.id}>
+
+                                    <p>
+                                        {address.street} {address.houseNumber}
+                                        <br />
+                                        {address.zipCode} {address.city}
+                                    </p>
+
+                                </div>
+
+                            ))
+
+                        ) : (
+
+                            <p>
+                                Keine Adressen vorhanden.
+                            </p>
+
+                        )}
+
+
+                        <h3>Telefonnummern</h3>
+
+                        {selectedPerson.phoneConnections?.length > 0 ? (
+
+                            selectedPerson.phoneConnections.map((phone) => (
+
+                                <p key={phone.id}>
+                                    {phone.phoneNumber}
+                                </p>
+
+                            ))
+
+                        ) : (
+
+                            <p>
+                                Keine Telefonnummern vorhanden.
+                            </p>
+
+                        )}
+
+
+                        <div className="dialog_buttons">
+
+                            <button
+                                className="styled_btn"
+                                onClick={() => setSelectedPerson(null)}>
+                                Schließen
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+        </>
+    )
 }
 
 export default App

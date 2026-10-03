@@ -11,7 +11,5 @@ DBCC CHECKIDENT ('[dbo].[PhoneConnection]', RESEED, 0);
 DBCC CHECKIDENT ('[dbo].[Person]', RESEED, 0);
 */
 
-
+/*DELETE FROM Address WHERE Id LIKE '2'*/
 SELECT * FROM Person
-SELECT * FROM Address
-SELECT * FROM PhoneConnection
