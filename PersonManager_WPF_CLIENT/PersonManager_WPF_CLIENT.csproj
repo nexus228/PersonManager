@@ -14,8 +14,10 @@
 
   <ItemGroup>
     <Reference Include="NexSearchField">
-      <HintPath>..\..\NexSearchField\NexSearchField\bin\Debug\net10.0-windows\NexSearchField.dll</HintPath>
+      <HintPath>..\lib\NexSearchField.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+ 
 
 </Project>
