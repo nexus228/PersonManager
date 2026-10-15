@@ -10,6 +10,10 @@ namespace PersonManager_WPF_CLIENT.Services
 
         Task UpdatePersonAsync(Person personToUpdate);
 
+        Task DeletePersonAsync(Person personToDelete);
+
+        Task CreatePersonAsync(Person personToCreate);
+
         Task<List<Person>> GetAllPersonsAsync();
     }
 }

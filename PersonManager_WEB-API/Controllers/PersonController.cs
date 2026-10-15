@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PersonManager_WEB_API.DTO;
 using PersonManager_WEB_API.Model;
 
 namespace PersonManager_WEB_API.Controllers
@@ -16,68 +17,173 @@ namespace PersonManager_WEB_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPersons()
+        public async Task<ActionResult<IList<PersonDTO>>> GetPersons()
         {
-            var persons = await _context.Persons.ToListAsync();
+            var persons = await _context.Persons
+            .AsNoTracking()
+            .Include(p => p.Addresses)
+            .Include(p => p.PhoneConnections)
+            .ToListAsync();
 
             if (persons == null)
+                return NotFound();
+
+            var result = new List<PersonDTO>();
+
+            foreach (var person in persons)
+            {
+                PersonDTO dto = _personToDTO(person);
+                result.Add(dto);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<PersonDTO>> CreatePerson(PersonDTO personDTOToCreate)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            Person personToCreate = _dtoToPerson(personDTOToCreate);
+
+            _context.Persons.Add(personToCreate);
+            await _context.SaveChangesAsync();
+
+            PersonDTO createdPersonDto = _personToDTO(personToCreate);
+
+            return Ok(createdPersonDto);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<PersonDTO>> UpdatePerson(int id, PersonDTO personDTOToUpdate)
+        {
+
+            if (id != personDTOToUpdate.Id)
+            {
+                return BadRequest();
+            }
+
+            var person = await _context.Persons.FindAsync(id);
+
+            if (person == null)
             {
                 return NotFound();
             }
 
-            var addresses = await _context.Addresses.ToListAsync();
-            var phoneConnections = await _context.PhoneConnections.ToListAsync();
+            person.FirstName = personDTOToUpdate.FirstName;
+            person.Name = personDTOToUpdate.Name;
+            person.DateOfBirth = personDTOToUpdate.DateOfBirth;
 
-            for (int i = 0; i < persons.Count; i++)
+
+            try
             {
-                if (addresses != null)
-                {
-                    persons[i].Addresses = addresses.Where(a => a.PersonId == persons[i].Id).ToList();
-                }
+                await _context.SaveChangesAsync();
 
-                if (phoneConnections != null)
-                {
-                    persons[i].PhoneConnections = phoneConnections.Where(p => p.PersonId == persons[i].Id).ToList();
-                }
+                PersonDTO dto = _personToDTO(person);
+                return Ok(dto);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while updating the person.");
             }
 
-            return Ok(persons);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePerson(int id, Person personToUpdate)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePerson(int id)
         {
-            if (personToUpdate != null)
+            var person = await _context.Persons.FindAsync(id);
+
+            if (person == null)
+            { return NotFound(); }
+
+
+            person.Addresses = await _context.Addresses.Where(address => address.PersonId == id).ToListAsync();
+            person.PhoneConnections = await _context.PhoneConnections.Where(phoneConnection => phoneConnection.PersonId == id).ToListAsync();
+
+            if (person.Addresses != null)
             {
-                if (id != personToUpdate.Id)
+                foreach (var addressToDelete in person.Addresses)
                 {
-                    return BadRequest();
+                    _context.Addresses.Remove(addressToDelete);
                 }
-
-                var person = await _context.Persons.FindAsync(id);
-
-                if (person == null)
-                {
-                    return NotFound();
-                }
-
-                person.FirstName = personToUpdate.FirstName;
-                person.Name = personToUpdate.Name;
-                person.DateOfBirth = personToUpdate.DateOfBirth;
-                
-
-                try 
-                {
-                    await _context.SaveChangesAsync();
-                    return Ok(person);
-                }
-                catch(Exception)
-                {
-                    return StatusCode(500, "An error occurred while updating the person.");
-                }
+                await _context.SaveChangesAsync();
             }
-            return BadRequest();
 
+            if (person.PhoneConnections != null)
+            {
+                foreach (var phoneConnectionToDelete in person.PhoneConnections)
+                {
+                    _context.PhoneConnections.Remove(phoneConnectionToDelete);
+                }
+                await _context.SaveChangesAsync();
+            }
+            _context.Persons.Remove(person);
+
+            await _context.SaveChangesAsync();
+            return Ok(person);
+        }
+
+
+        private Person _dtoToPerson(PersonDTO personDTO)
+        {
+            return new Person
+            {
+                
+                FirstName = personDTO.FirstName,
+                Name = personDTO.Name,
+                DateOfBirth = personDTO.DateOfBirth,
+
+                Addresses = personDTO.Addresses.Select(a =>
+                    new Address
+                    {               
+                        ZipCode = a.ZipCode,
+                        City = a.City,
+                        Street = a.Street,
+                        HouseNumber = a.HouseNumber
+                    }).ToList(),
+
+                PhoneConnections = personDTO.PhoneConnections.Select(p =>
+                    new PhoneConnection
+                    {
+                        PhoneNumber = p.PhoneNumber
+                    }).ToList()
+            };
+        }
+
+        private PersonDTO _personToDTO(Person person)
+        {
+            return new PersonDTO
+            {
+                Id = person.Id,
+                FirstName = person.FirstName,
+                Name = person.Name,
+                DateOfBirth = person.DateOfBirth,
+
+                Addresses = person.Addresses.Select(a =>
+                    new AddressDTO
+                    {
+                        Id = a.Id,
+                        ZipCode = a.ZipCode,
+                        City = a.City,
+                        Street = a.Street,
+                        HouseNumber = a.HouseNumber
+                    }).ToList(),
+
+                PhoneConnections = person.PhoneConnections.Select(p =>
+                    new PhoneConnectionDTO
+                    {
+                        Id = p.Id,
+                        PhoneNumber = p.PhoneNumber
+                    }).ToList()
+            };
         }
     }
 }
+
+
+
+  

@@ -87,9 +87,13 @@ namespace PersonManager_WPF_CLIENT.ViewModel
 
         public ICommand ClearListCommand { get; private set; }
 
+        public ICommand AddPersonCommand { get; private set; }
+        
         public ICommand ShowPersonDetailsCommand { get; private set; }
 
         public ICommand EditPersonDataCommand { get; private set; }
+
+        public ICommand DeletePersonDataCommand { get; private set; }
 
         #endregion
 
@@ -98,6 +102,10 @@ namespace PersonManager_WPF_CLIENT.ViewModel
         public event EventHandler<Person>? ShowDetailsViewRequested;
 
         public event EventHandler<Person>? ShowEditViewRequested;
+
+        public event EventHandler<Person>? ShowDeleteViewRequested;
+
+        public event EventHandler? ShowCreateViewRequested;
 
         #endregion
         public MainWindowViewModel(IPersonService personService)
@@ -112,10 +120,12 @@ namespace PersonManager_WPF_CLIENT.ViewModel
             PersonCollectionView.Filter = SearchFilter;
 
             LoadPersonsCommand = new BaseCommand(async () => await LoadPersonsAsync());
-            ClearListCommand = new BaseCommand(() => Persons.Clear(), CanClearList);
+            ClearListCommand = new BaseCommand(() => Persons.Clear(), IsListNotEmpty);
+            AddPersonCommand = new BaseCommand(() => ShowCreateViewRequested?.Invoke(this, EventArgs.Empty), IsListNotEmpty);
 
             ShowPersonDetailsCommand = new RelayCommand<Person>(async (person) => ShowDetailsViewRequested?.Invoke(this, person));
-            EditPersonDataCommand = new RelayCommand<Person>(async (person) => ShowEditViewRequested?.Invoke(this, person));  
+            EditPersonDataCommand = new RelayCommand<Person>(async (person) => ShowEditViewRequested?.Invoke(this, person));
+            DeletePersonDataCommand = new RelayCommand<Person>(async (person) => ShowDeleteViewRequested?.Invoke(this, person));
         }
 
         public override void Dispose()
@@ -133,9 +143,14 @@ namespace PersonManager_WPF_CLIENT.ViewModel
             {
                 clearListCommand.RaiseCanExecuteChanged();
             }
+
+            if (AddPersonCommand is BaseCommand addPersonCommand)
+            {
+                addPersonCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        private bool CanClearList()
+        private bool IsListNotEmpty() 
         {
             return Persons.Count > 0;
         }
@@ -192,13 +207,24 @@ namespace PersonManager_WPF_CLIENT.ViewModel
                 return;
             }
 
-            Person? existingPerson = Persons.FirstOrDefault(p => p.Id == e.Person.Id);
-            if(existingPerson == null)
+            if (e.Identfier == PersonChangedEventIdentifier.UPDATED)
             {
-                return;
+                Person? existingPerson = Persons.FirstOrDefault(p => p.Id == e.Person.Id);
+                if (existingPerson == null)
+                {
+                    return;
+                }
+                int indexOfExistingPerson = Persons.IndexOf(existingPerson);
+                Persons[indexOfExistingPerson] = e.Person;
             }
-            int indexOfExistingPerson = Persons.IndexOf(existingPerson);
-            Persons[indexOfExistingPerson] = e.Person;
+            else if (e.Identfier == PersonChangedEventIdentifier.DELETED)
+            {
+                Persons.Remove(e.Person);
+            }
+            else if (e.Identfier == PersonChangedEventIdentifier.CREATED)
+            {
+                Persons.Add(e.Person);
+            }
         }
 
         private async Task _simulateProgessDelay()

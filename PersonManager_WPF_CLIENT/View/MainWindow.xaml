@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PersonManager_WPF_CLIENT.View"
+        xmlns:nexcontrols="clr-namespace:NexSearchField;assembly=NexSearchField"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Person Manager" Height="450" Width="800">
@@ -37,6 +38,15 @@
                 Height="30"
                 HorizontalAlignment="Left"
                 Command="{Binding ClearListCommand}"/>
+
+            <Button 
+                Style="{StaticResource SE_ButtonStyle}"    
+                Margin="0,0,10,0"
+                Content="{StaticResource String_AddPerson}"
+                Width="120"
+                Height="30"
+                HorizontalAlignment="Left"
+                Command="{Binding AddPersonCommand}"/>
         </StackPanel>
         
 
@@ -45,13 +55,20 @@
         <StackPanel Margin="0,10,0,10" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
 
             <Label 
-                HorizontalContentAlignment="Center" 
+                
+                VerticalAlignment="Center"
                 Content="{StaticResource String_SearchPersonForName}"/>
-            <TextBox 
+
+            <nexcontrols:NexSearchField 
+                VerticalAlignment="Center"
+                Width="350"
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <!--<TextBox 
                 Width="250"
                 HorizontalAlignment="Left" VerticalContentAlignment="Center"
                 Margin="0,0,0,0"
-                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>-->
 
         </StackPanel>
         
@@ -67,11 +84,13 @@
                   MouseDoubleClick="OnMouseDoubleClick">
             
             <DataGrid.Columns>
+                
+               
 
                 <DataGridTextColumn
                     Header="{StaticResource String_FirstName}"
                     Binding="{Binding FirstName}"
-                    Width="*">
+                     Width="2*" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -87,7 +106,7 @@
                 <DataGridTextColumn 
                     Header="{StaticResource String_Name}" 
                     Binding="{Binding Name}" 
-                    Width="*">
+                     Width="2*" >
                     
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -102,7 +121,7 @@
                 <DataGridTextColumn
                     Header="{StaticResource String_DateOfBirth}"
                     Binding="{Binding DateOfBirth, StringFormat={}{0:dd.MM.yyyy}}"
-                    Width="*">
+                    Width="2*" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -115,8 +134,8 @@
 
                 <DataGridTemplateColumn 
                     Header="{StaticResource String_Actions}"
-                    Width="SizeToCells"
-                    MinWidth="125">
+                    Width="3*" 
+                    MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
 
@@ -130,7 +149,7 @@
                                     CommandParameter="{Binding}">
 
                                     <StackPanel>
-                                        <Image Source="{StaticResource Image_PersonDetails}" Margin="0,5,0,0"/>
+                                        <Image Source="{StaticResource Image_Details}" Margin="0,5,0,0"/>
                                         <Label Content="{StaticResource String_Details}" Foreground="White"/>
                                     </StackPanel>
 
@@ -144,8 +163,20 @@
                                     CommandParameter="{Binding}">
 
                                     <StackPanel>
-                                        <Image Source="{StaticResource Image_EditPerson}" Margin="0,5,0,0"/>
+                                        <Image Source="{StaticResource Image_Edit}" Margin="0,5,0,0"/>
                                         <Label Content="{StaticResource String_Edit}" Foreground="White"/> 
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button
+                                     Style="{StaticResource SE_ButtonStyle}"
+                                     Command="{Binding DataContext.DeletePersonDataCommand,RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                     CommandParameter="{Binding}">
+
+                                    <StackPanel>
+                                        <Image Source="{StaticResource Image_Delete}" Margin="0,5,0,0"/>
+                                        <Label Content="{StaticResource String_Delete}" Foreground="White"/>
                                     </StackPanel>
 
                                 </Button>

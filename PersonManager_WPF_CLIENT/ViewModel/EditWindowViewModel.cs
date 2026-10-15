@@ -95,9 +95,9 @@ namespace PersonManager_WPF_CLIENT.ViewModel
                 NameToEdit = _personToEdit.Name;
 
             if (_personToEdit.DateOfBirth != null)
-                DateOfBirthToEdit = new DateTime(_personToEdit.DateOfBirth.Value.Year,
-                    _personToEdit.DateOfBirth.Value.Month, 
-                    _personToEdit.DateOfBirth.Value.Day);
+                DateOfBirthToEdit = new DateTime(_personToEdit.DateOfBirth.Year,
+                    _personToEdit.DateOfBirth.Month, 
+                    _personToEdit.DateOfBirth.Day);
 
             SaveChangesCommand = new BaseCommand(SaveChanges, CanSaveChanges);
         }
@@ -114,9 +114,9 @@ namespace PersonManager_WPF_CLIENT.ViewModel
                 returnValue = true;
             }
             if (_personToEdit.DateOfBirth != null && !DateOfBirthToEdit.Equals(
-                new DateTime(_personToEdit.DateOfBirth.Value.Year, 
-                _personToEdit.DateOfBirth.Value.Month, 
-                _personToEdit.DateOfBirth.Value.Day)))
+                new DateTime(_personToEdit.DateOfBirth.Year, 
+                _personToEdit.DateOfBirth.Month, 
+                _personToEdit.DateOfBirth.Day)))
             {
                 returnValue = true;
             }

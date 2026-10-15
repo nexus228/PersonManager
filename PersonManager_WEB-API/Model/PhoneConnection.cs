@@ -6,8 +6,11 @@ namespace PersonManager_WEB_API.Model
     {
         public int Id { get; set; }
 
-        [JsonIgnore]
         public int PersonId { get; set; }
-        public string? PhoneNumber { get; set; }
+
+        public required string PhoneNumber { get; set; }
+
+        // Navigation Property
+        public Person Person { get; set; }
     }
 }

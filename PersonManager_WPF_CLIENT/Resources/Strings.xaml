@@ -8,6 +8,8 @@
     <system:String x:Key="String_LoadPerson">Personen laden</system:String>
 
     <system:String x:Key="String_ClearList">Liste leeren</system:String>
+    <system:String x:Key="String_AddPerson">Person hinzufügen</system:String>
+    
 
     <system:String x:Key="String_SearchPersonForName">Suche eine Person anhand des Vornamens oder Nachnamens:</system:String>
     
@@ -24,10 +26,12 @@
 
     <system:String x:Key="String_Details">Details</system:String>
     <system:String x:Key="String_Edit">Bearbeiten</system:String>
-
+    <system:String x:Key="String_Delete">Löschen</system:String>
+    
     <system:String x:Key="String_LoadData">Lade Daten</system:String>
     <system:String x:Key="String_SaveProgress">Speichern</system:String>
     
     <system:String x:Key="String_SaveChanges">Änderungen speichern</system:String>
+    <system:String x:Key="String_CreatePerson">Person erstellen</system:String>
 
 </ResourceDictionary>

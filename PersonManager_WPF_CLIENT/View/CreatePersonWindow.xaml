@@ -1,0 +1,252 @@
+﻿<Window x:Class="PersonManager_WPF_CLIENT.View.CreatePersonWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PersonManager_WPF_CLIENT.View"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Person erstellen" Height="450" Width="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Personenangaben -->
+            <StackPanel Grid.Row="0">
+
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0"
+                       Content="{StaticResource String_FirstName_WithColon}"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+                    <TextBox Grid.Column="1"
+                         Margin="5"
+                         Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center"/>
+                </Grid>
+
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0"
+                       Content="{StaticResource String_Name_WithColon}"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+                    <TextBox Grid.Column="1"
+                         Margin="5"
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center"/>
+                </Grid>
+
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0"
+                       Content="{StaticResource String_DateOfBirth_WithColon}"
+                       VerticalAlignment="Center"
+                       Margin="5"/>
+
+                    <DatePicker Grid.Column="1"
+                            Margin="5"
+                            SelectedDate="{Binding DateOfBirth, UpdateSourceTrigger=PropertyChanged}"/>
+                </Grid>
+
+            </StackPanel>
+
+            <!-- Adressen -->
+            <Expander Grid.Row="1"
+                  Header="Adressen"
+                  IsExpanded="True"
+                  Margin="5">
+
+                <StackPanel Margin="5">
+
+                    <Button Content="+ Adresse hinzufügen"
+                        Command="{Binding AddAddressCommand}"
+                        HorizontalAlignment="Right"
+                        Padding="10,5"
+                        Margin="0,0,0,10"/>
+
+                    <ItemsControl ItemsSource="{Binding Addresses}">
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <Border BorderBrush="#DDDDDD"
+                    BorderThickness="1"
+                    CornerRadius="5"
+                    Padding="8"
+                    Margin="0,0,0,8">
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Zeile 1: Straße und Hausnummer -->
+
+                                        <Label Grid.Row="0"
+                           Grid.Column="0"
+                           Content="Straße:"
+                           VerticalAlignment="Center"
+                           Margin="3"/>
+
+                                        <TextBox Grid.Row="0"
+                             Grid.Column="1"
+                             Margin="3"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding Street,
+                                            UpdateSourceTrigger=PropertyChanged}"/>
+
+                                        <Label Grid.Row="0"
+                           Grid.Column="2"
+                           Content="Hausnr.:"
+                           VerticalAlignment="Center"
+                           Margin="3"/>
+
+                                        <TextBox Grid.Row="0"
+                             Grid.Column="3"
+                             Margin="3"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding HouseNumber,
+                                            UpdateSourceTrigger=PropertyChanged}"/>
+
+                                        <!-- Zeile 2: Postleitzahl und Ort -->
+
+                                        <Label Grid.Row="1"
+                           Grid.Column="2"
+                           Content="PLZ:"
+                           VerticalAlignment="Center"
+                           Margin="3"/>
+
+                                        <TextBox Grid.Row="1"
+                             Grid.Column="3"
+                             Margin="3"
+                             VerticalContentAlignment="Center"
+                             MaxLength="5"
+                             Text="{Binding ZipCode,
+                                            UpdateSourceTrigger=PropertyChanged}"/>
+
+                                        <Label Grid.Row="1"
+                           Grid.Column="0"
+                           Content="Ort:"
+                           VerticalAlignment="Center"
+                           Margin="3"/>
+
+                                        <TextBox Grid.Row="1"
+                             Grid.Column="1"
+                             Margin="3"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding City,
+                                            UpdateSourceTrigger=PropertyChanged}"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                    </ItemsControl>
+
+                </StackPanel>
+            </Expander>
+
+            <!-- Telefonnummern -->
+            <Expander Grid.Row="2"
+                  Header="Telefonnummern"
+                  IsExpanded="True"
+                  Margin="5">
+
+                <StackPanel Margin="5">
+
+                    <Button Content="+ Telefonnummer hinzufügen"
+                        Command="{Binding AddPhoneNumberCommand}"
+                        HorizontalAlignment="Right"
+                        Padding="10,5"
+                        Margin="0,0,0,10"/>
+
+                    <ItemsControl ItemsSource="{Binding PhoneConnections}">
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <Border BorderBrush="#DDDDDD"
+                    BorderThickness="1"
+                    CornerRadius="5"
+                    Padding="8"
+                    Margin="0,0,0,8">
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Column="0"
+                           Content="Telefonnummer:"
+                           VerticalAlignment="Center"
+                           Margin="3"/>
+
+                                        <TextBox Grid.Column="1"
+                             Margin="3"
+                             VerticalContentAlignment="Center"
+                             MaxLength="25"
+                             ToolTip="Telefonnummer eingeben"
+                             Text="{Binding PhoneNumber,
+                                            UpdateSourceTrigger=PropertyChanged}">
+                                            
+                                        </TextBox>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                    </ItemsControl>
+
+                </StackPanel>
+            </Expander>
+
+            <!-- Person und zugehörige Daten speichern -->
+            <Button Grid.Row="3"
+                Margin="20"
+                MinHeight="35"
+                Width="200"
+                HorizontalAlignment="Center"
+                Content="{StaticResource String_CreatePerson}"
+                Style="{StaticResource SE_ButtonStyle}"
+                Command="{Binding CreatePersonCommand}"/>
+
+        </Grid>
+        </ScrollViewer>
+</Window>

@@ -26,6 +26,20 @@ namespace PersonManager_WEB_API
 
             modelBuilder.Entity<PhoneConnection>()
                 .ToTable("PhoneConnection");
+
+
+            modelBuilder.Entity<Person>()
+                .HasMany(p => p.Addresses)
+                .WithOne(a => a.Person)
+                .HasForeignKey(a => a.PersonId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Person>()
+                .HasMany(p => p.PhoneConnections)
+                .WithOne(p => p.Person)
+                .HasForeignKey(p => p.PersonId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
 
     }

@@ -7,6 +7,7 @@ using PersonManager_WPF_CLIENT.ViewModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace PersonManager_WPF_CLIENT
 {
@@ -19,6 +20,7 @@ namespace PersonManager_WPF_CLIENT
 
         private MainWindowViewModel _mainWindowViewModel;
         private EditWindow _editWindow;
+        private CreatePersonWindow _createPersonWindow;
 
         public App()
         {
@@ -35,6 +37,8 @@ namespace PersonManager_WPF_CLIENT
 
             _mainWindowViewModel.ShowDetailsViewRequested += MainWindowViewModel_ShowDetailsViewRequested;
             _mainWindowViewModel.ShowEditViewRequested += MainWindowViewModel_ShowEditViewRequested;
+            _mainWindowViewModel.ShowDeleteViewRequested += MainWindowViewModel_ShowDeleteViewRequested;
+            _mainWindowViewModel.ShowCreateViewRequested += MainWindowViewModel_ShowCreateViewRequested;
 
             MainWindow mainWindow = new MainWindow()
             {
@@ -45,6 +49,8 @@ namespace PersonManager_WPF_CLIENT
             mainWindow.Show();
         }
 
+        
+
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
@@ -54,15 +60,25 @@ namespace PersonManager_WPF_CLIENT
             // Dispose of any resources if necessary
             _mainWindowViewModel.ShowDetailsViewRequested -= MainWindowViewModel_ShowDetailsViewRequested;
             _mainWindowViewModel.ShowEditViewRequested -= MainWindowViewModel_ShowEditViewRequested;
+            _mainWindowViewModel.ShowDeleteViewRequested -= MainWindowViewModel_ShowDeleteViewRequested;
+            _mainWindowViewModel.ShowCreateViewRequested -= MainWindowViewModel_ShowCreateViewRequested;
+
             _mainWindowViewModel.Dispose();
         }
 
 
         private void PersonService_PersonChanged(object? sender, PersonChangedEventArgs e)
         {
-            if (_editWindow != null && _editWindow.IsActive)
+            if (e.Identfier == PersonChangedEventIdentifier.CREATED || e.Identfier == PersonChangedEventIdentifier.UPDATED)
             {
-                _editWindow.Close();
+                if (_createPersonWindow != null && _createPersonWindow.IsActive)
+                {
+                    _createPersonWindow.Close();
+                }
+                if (_editWindow != null && _editWindow.IsActive)
+                {
+                    _editWindow.Close();
+                }
             }
         }
 
@@ -75,6 +91,30 @@ namespace PersonManager_WPF_CLIENT
             return new PersonApiClient(httpClient);
         }
 
+
+        private async void MainWindowViewModel_ShowCreateViewRequested(object? sender, EventArgs e)
+        {
+            _createPersonWindow = new CreatePersonWindow() 
+            {
+                Height = 400,
+                Width = 700,
+                DataContext = new CreatePersonWindowViewModel(_personService)
+            };
+
+            _createPersonWindow.ShowDialog();
+        
+        }
+
+        private async void MainWindowViewModel_ShowDeleteViewRequested(object? sender, Person personToDelete)
+        {
+            string text = string.Format("Sind Sie sicher, dass Sie {0} {1}-Datensatz löschen möchten?", personToDelete.FirstName, personToDelete.Name);
+            MessageBoxResult result = MessageBox.Show(text, "", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+               await _personService.DeletePersonAsync(personToDelete);
+            }
+        }
 
         private void MainWindowViewModel_ShowDetailsViewRequested(object? sender, Person personToShow)
         {
@@ -90,7 +130,7 @@ namespace PersonManager_WPF_CLIENT
 
         }
 
-        private void MainWindowViewModel_ShowEditViewRequested(object? sender, Person e)
+        private void MainWindowViewModel_ShowEditViewRequested(object? sender, Person personToEdit)
         {
 
             if(_editWindow != null)
@@ -102,7 +142,7 @@ namespace PersonManager_WPF_CLIENT
             {
                 Height = 400,
                 Width = 650,
-                DataContext = new EditWindowViewModel(e, _personService)
+                DataContext = new EditWindowViewModel(personToEdit, _personService)
             };
             _editWindow.ShowDialog();
         }

@@ -5,11 +5,18 @@ namespace PersonManager_WEB_API.Model
     public class Address
     {
         public int Id { get; set; }
-        [JsonIgnore]
+
         public int PersonId { get; set; }
-        public string? Street { get; set; }
-        public string? HouseNumber { get; set; }
-        public string? ZipCode { get; set; }
-        public string? City { get; set; }
+
+        public required string ZipCode { get; set; }
+
+        public required string City { get; set; }
+
+        public required string Street { get; set; }
+
+        public required string HouseNumber { get; set; }
+
+        // Navigation Property
+        public Person Person { get; set; }
     }
 }
