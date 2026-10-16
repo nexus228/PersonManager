@@ -46,7 +46,9 @@ namespace PersonManager_WPF_CLIENT
                 Width = SystemParameters.PrimaryScreenWidth * 0.5,
                 DataContext = _mainWindowViewModel
             };
+        
             mainWindow.Show();
+            
         }
 
         

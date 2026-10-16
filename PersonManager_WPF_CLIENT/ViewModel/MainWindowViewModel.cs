@@ -107,6 +107,8 @@ namespace PersonManager_WPF_CLIENT.ViewModel
 
         public event EventHandler? ShowCreateViewRequested;
 
+        public event EventHandler<Person>? NewPersonAdded;
+
         #endregion
         public MainWindowViewModel(IPersonService personService)
         {
@@ -224,6 +226,7 @@ namespace PersonManager_WPF_CLIENT.ViewModel
             else if (e.Identfier == PersonChangedEventIdentifier.CREATED)
             {
                 Persons.Add(e.Person);
+                NewPersonAdded?.Invoke(this, e.Person);
             }
         }
 
