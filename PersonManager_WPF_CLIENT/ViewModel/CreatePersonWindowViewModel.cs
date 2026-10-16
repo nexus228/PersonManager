@@ -157,7 +157,7 @@ namespace PersonManager_WPF_CLIENT.ViewModel
 
             foreach (PhoneConnection phoneConnection in PhoneConnections)
             {
-                if ((phoneConnection.PhoneNumber == string.Empty) && !PersonDataValidator.IsPhoneNumberValid(phoneConnection.PhoneNumber))
+                if ((phoneConnection.PhoneNumber == string.Empty) || !PersonDataValidator.IsPhoneNumberValid(phoneConnection.PhoneNumber))
                 {
                     return false;
                 }

@@ -8,7 +8,7 @@ namespace PersonManager_WPF_CLIENT.Utils
         { 
             bool isValid = false;
 
-            string pattern = @"^(\+|[0-9])";
+            string pattern = @"^\+?[0-9]*$";
             isValid = Regex.IsMatch(phoneNumber, pattern);
 
 
